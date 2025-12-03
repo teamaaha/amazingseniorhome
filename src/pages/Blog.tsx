@@ -19,7 +19,7 @@ interface BlogPost {
   image_url: string | null;
   external_link: string | null;
   external_link_text: string | null;
-  published_date: string;
+  created_at: string;
 }
 
 const Blog = () => {
@@ -34,9 +34,9 @@ const Blog = () => {
     try {
       const { data, error } = await supabase
         .from("blog_posts")
-        .select("id, title, content, excerpt, image_url, external_link, external_link_text, published_date")
+        .select("id, title, content, excerpt, image_url, external_link, external_link_text, created_at")
         .eq("is_published", true)
-        .order("published_date", { ascending: false });
+        .order("created_at", { ascending: false });
 
       if (!error && data) {
         setPosts(data);
@@ -107,11 +107,12 @@ const Blog = () => {
                       <CardHeader>
                         <div className="flex items-center gap-2 text-muted-foreground mb-2">
                           <Calendar className="h-4 w-4" />
-                          <time dateTime={post.published_date}>
-                            {new Date(post.published_date).toLocaleDateString('en-US', {
-                              year: 'numeric',
-                              month: 'long',
-                              day: 'numeric'
+                          <time dateTime={post.created_at}>
+                            {new Date(post.created_at).toLocaleDateString("en-US", {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                              timeZone: "UTC",
                             })}
                           </time>
                         </div>
